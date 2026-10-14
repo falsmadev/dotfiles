@@ -17,6 +17,8 @@ fi
 
 DEST="$ROOT/agent/skills"
 rm -rf "$DEST"; mkdir -p "$DEST"
+# MIT requires the license text to travel with copies
+cp "$SRC/LICENSE" "$DEST/LICENSE"
 missing=0
 while read -r name; do
   [[ -z "$name" || "$name" == \#* ]] && continue

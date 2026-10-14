@@ -66,3 +66,9 @@ Agent files are neutral (no model); the model line is the only pi-specific bit.
 1. Dev environment (this)
 2. Agent core: skills, MCP list, global rules, harness-neutral (done)
 3. pi adapter (done, applied, smoke-tested)
+
+## Licenses and attribution
+
+- `agent/skills/` is vendored from [mattpocock/skills](https://github.com/mattpocock/skills), MIT, Copyright (c) 2026 Matt Pocock (`agent/skills/LICENSE`).
+- `adapters/pi/extensions/subagent/` is vendored from [pi](https://github.com/earendil-works/pi), MIT, Copyright (c) 2025 Mario Zechner (`./LICENSE` there).
+- Everything else is my own configuration.
