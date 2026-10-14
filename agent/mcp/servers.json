@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pare-git":   { "command": "npx", "args": ["-y", "@paretools/git@0.22.2"] },
+    "pare-lint":  { "command": "npx", "args": ["-y", "@paretools/lint@0.22.2"] },
+    "pare-build": { "command": "npx", "args": ["-y", "@paretools/build@0.22.2"] },
+    "pare-test":  { "command": "npx", "args": ["-y", "@paretools/test@0.22.2"] }
+  }
+}

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Vendor skills from upstream into agent/skills according to agent/skills.list.
+#   scripts/sync-skills            clone/update upstream in cache, then copy
+#   scripts/sync-skills --src DIR  use an existing checkout instead
+# Records the upstream commit in agent/skills.lock. Review the git diff before committing.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+UPSTREAM="https://github.com/mattpocock/skills"
+SRC=""
+while (($#)); do case "$1" in --src) SRC="$2"; shift 2 ;; *) echo "unknown arg $1" >&2; exit 2 ;; esac; done
+
+if [[ -z "$SRC" ]]; then
+  SRC="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles/mattpocock-skills"
+  if [[ -d "$SRC/.git" ]]; then git -C "$SRC" pull -q --ff-only; else git clone -q "$UPSTREAM" "$SRC"; fi
+fi
+[[ -d "$SRC/skills" ]] || { echo "no skills/ dir in $SRC" >&2; exit 1; }
+
+DEST="$ROOT/agent/skills"
+rm -rf "$DEST"; mkdir -p "$DEST"
+missing=0
+while read -r name; do
+  [[ -z "$name" || "$name" == \#* ]] && continue
+  dir="$(ls -d "$SRC"/skills/*/"$name" 2>/dev/null | head -1 || true)"
+  if [[ -z "$dir" ]]; then echo "MISSING upstream: $name" >&2; missing=1; continue; fi
+  mkdir -p "$DEST/$name"
+  # agents/ holds Codex UI metadata (openai.yaml); not used by other harnesses
+  (cd "$dir" && tar --exclude='./agents' -cf - .) | tar -xf - -C "$DEST/$name"
+  echo "  + $name"
+done < "$ROOT/agent/skills.list"
+
+{
+  echo "upstream=$UPSTREAM"
+  echo "commit=$(git -C "$SRC" rev-parse HEAD)"
+  echo "date=$(git -C "$SRC" log -1 --format=%cI)"
+} > "$ROOT/agent/skills.lock"
+echo "locked: $(sed -n 2p "$ROOT/agent/skills.lock")"
+exit $missing

@@ -1,0 +1,17 @@
+# Skills vendored from mattpocock/skills. One name per line; sync-skills finds it under skills/*/<name>.
+# Dropped on purpose (dependency/usage): ask-matt, wayfinder (need research/prototype/retro/...), triage,
+# implement-spec (needs subagents+worktrees), codebase-design, prototype, handoff, research, retro,
+# diagnosing-bugs, improve-codebase-architecture, writing-for-agents.
+setup-matt-pocock-skills
+grill-with-docs
+grilling
+grill-me
+domain-modeling
+to-spec
+to-tickets
+implement
+tdd
+code-review
+pr
+wizard
+wait-what
