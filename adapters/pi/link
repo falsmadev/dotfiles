@@ -4,6 +4,7 @@
 #   AGENTS.md  -> ~/.pi/agent/AGENTS.md          (symlink)
 #   extension  -> ~/.pi/agent/extensions/subagent (symlink)
 #   agents     -> ~/.pi/agent/agents/<name>.md   (rendered copies: model line added from models.conf)
+#   settings   -> ~/.pi/agent/settings.json      (managed keys merged over existing; pi's own runtime keys kept)
 #   mcp        -> ~/.pi/agent/mcp.json           (servers merged in + mcp-overrides.json; existing entries such as radius kept)
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -72,9 +73,23 @@ for g in "$PI"/agents/*.md; do
     && { run rm "$g"; echo "   - pruned $g"; }
 done
 
+# --- settings + MCP merges (both need jq) ---
+command -v jq >/dev/null || { warn "jq not installed; skipping settings and MCP merges (./install packages)"; exit 0; }
+
+# --- settings merge ---
+log "Settings -> $PI/settings.json (merge)"
+scur="$PI/settings.json"
+sbase="$( [[ -f "$scur" ]] && cat "$scur" || echo '{}' )"
+smerged="$(jq -S --slurpfile managed "$ROOT/adapters/pi/settings.json" '. * $managed[0]' <<<"$sbase")"
+if [[ -f "$scur" && "$(jq -S . "$scur")" == "$smerged" ]]; then echo "   = $scur"
+else
+  [[ -f "$scur" ]] && { run mkdir -p "$BACKUP"; run cp "$scur" "$BACKUP/settings.json"; echo "   ~ backed up $scur"; }
+  if [[ "$DRY" == 1 ]]; then echo "   [dry-run] write merged settings.json: $(jq -r 'keys|join(", ")' <<<"$smerged")"
+  else mkdir -p "$PI"; printf '%s\n' "$smerged" > "$scur"; echo "   + settings: $(jq -r 'keys|join(", ")' <<<"$smerged")"; fi
+fi
+
 # --- MCP merge ---
 log "MCP servers -> $PI/mcp.json (merge)"
-command -v jq >/dev/null || { warn "jq not installed; skipping MCP merge (./install packages)"; exit 0; }
 cur="$PI/mcp.json"
 base="$( [[ -f "$cur" ]] && cat "$cur" || echo '{}' )"
 # neutral servers first, then pi-only overrides (exposure) merged into the matching servers

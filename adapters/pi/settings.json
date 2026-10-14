@@ -1,0 +1,12 @@
+{
+  "$schema": "https://pi.dev/schemas/settings.schema.json",
+  "defaultProvider": "radius",
+  "defaultModel": "deepseek-v4.1-flash",
+  "defaultThinkingLevel": "low",
+  "showCacheMissNotices": true,
+  "enabledModels": [
+    "radius/claude-sonnet-5-5",
+    "radius/claude-haiku-5-5",
+    "radius/deepseek-v4.1-flash"
+  ]
+}

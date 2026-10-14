@@ -13,7 +13,7 @@ config/            app configs (starship)
 packages/          arch.txt, debian.txt (system), mise.toml (dev tools)
 agent/             harness-neutral: AGENTS.md, skills/, agents/, mcp/servers.json, skills.list + skills.lock
 scripts/           sync-skills (vendor upstream skills per agent/skills.list)
-adapters/pi/       pi wiring: link script, models.conf, vendored subagent extension
+adapters/pi/       pi wiring: link script, models.conf, settings.json + mcp-overrides.json, vendored subagent extension
 ```
 
 ## Usage
@@ -56,6 +56,10 @@ grill-with-docs  ->  to-spec  ->  to-tickets  ->  implement (drives tdd)  ->  co
 | `adapters/pi/extensions/subagent` | `~/.pi/agent/extensions/subagent` | symlink (vendored from pi 1.2.0, see PROVENANCE.md) |
 | `agent/agents/*.md` | `~/.pi/agent/agents/*.md` | rendered; `model:` added from `adapters/pi/models.conf` |
 | `agent/mcp/servers.json` + `adapters/pi/mcp-overrides.json` | `~/.pi/agent/mcp.json` | merged; existing servers (e.g. radius) kept. Overrides expose a few read-only pare tools directly (pi hides MCP tools behind codemode by default) |
+| `adapters/pi/settings.json` | `~/.pi/agent/settings.json` | merged; repo keys win, pi's own state (e.g. `lastChangelogVersion`) kept |
+
+Settings and MCP are merged, not symlinked, because pi writes its own state into the same files. Keys you remove
+from the repo are not deleted from the live file. Managed settings are model defaults, thinking level, and cache notices.
 
 Agent: `reviewer` (claude-sonnet-5-5), the one `code-review` fans out to for both its Standards and Spec reviews.
 The skill's own brief defines each review, so the agent file only pins the model and keeps it read-only. Change models in
