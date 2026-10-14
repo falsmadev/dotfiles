@@ -24,7 +24,6 @@ _source_first() { local f; for f in "$@"; do [[ -r $f ]] && { source "$f"; retur
 [[ -r "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
 _has mise && eval "$(mise activate zsh)"
 _has starship && eval "$(starship init zsh)"
-_has zoxide && eval "$(zoxide init zsh)"
 if _has fzf; then
   _source_first /usr/share/fzf/key-bindings.zsh /usr/share/doc/fzf/examples/key-bindings.zsh
   _source_first /usr/share/fzf/completion.zsh /usr/share/doc/fzf/examples/completion.zsh
@@ -41,10 +40,7 @@ alias ls='ls --color=auto'
 alias la='ls -a --color=auto'
 alias tree='tree --dirsfirst -F'
 alias grep='grep --color=auto'
-_has eza && alias ll='eza -l --git --group-directories-first'
 _has bat && alias cat='bat --paging=never'
-# Debian ships these under different names
-_has batcat && ! _has bat && alias bat='batcat'
-_has fdfind && ! _has fd && alias fd='fdfind'
+_has batcat && ! _has bat && alias bat='batcat'  # Debian ships it as batcat
 
 [[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

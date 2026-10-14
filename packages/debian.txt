@@ -8,8 +8,6 @@ zsh-autosuggestions
 zsh-syntax-highlighting
 fzf
 ripgrep
-fd-find
 bat
 btop
 jq
-unzip
