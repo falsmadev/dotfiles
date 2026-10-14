@@ -57,8 +57,9 @@ grill-with-docs  ->  to-spec  ->  to-tickets  ->  implement (drives tdd)  ->  co
 | `agent/agents/*.md` | `~/.pi/agent/agents/*.md` | rendered; `model:` added from `adapters/pi/models.conf` |
 | `agent/mcp/servers.json` + `adapters/pi/mcp-overrides.json` | `~/.pi/agent/mcp.json` | merged; existing servers (e.g. radius) kept. Overrides expose a few read-only pare tools directly (pi hides MCP tools behind codemode by default) |
 
-Agents: `scout` (deepseek-v4.1-flash), `standards-reviewer` and `spec-reviewer` (claude-sonnet-5-5), the pair the
-`code-review` skill fans out to. Change models in `models.conf`, re-run `./install pi`, then `/reload` in pi.
+Agent: `reviewer` (claude-sonnet-5-5), the one `code-review` fans out to for both its Standards and Spec reviews.
+The skill's own brief defines each review, so the agent file only pins the model and keeps it read-only. Change models in
+`models.conf`, re-run `./install pi`, then `/reload` in pi.
 Agent files are neutral (no model); the model line is the only pi-specific bit.
 
 ## Roadmap
