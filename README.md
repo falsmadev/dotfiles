@@ -66,4 +66,3 @@ Agent files are neutral (no model); the model line is the only pi-specific bit.
 1. Dev environment (this)
 2. Agent core: skills, MCP list, global rules, harness-neutral (done)
 3. pi adapter (done, applied, smoke-tested)
-4. Work / personal split

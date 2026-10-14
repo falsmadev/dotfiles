@@ -43,4 +43,4 @@ alias grep='grep --color=auto'
 _has bat && alias cat='bat --paging=never'
 _has batcat && ! _has bat && alias bat='batcat'  # Debian ships it as batcat
 
-[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+if [[ -r "$HOME/.zshrc.local" ]]; then source "$HOME/.zshrc.local"; fi
