@@ -1,0 +1,15 @@
+# System packages (pacman). Dev tools live in mise.toml, not here.
+base-devel
+curl
+git
+vim
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+fzf
+ripgrep
+fd
+eza
+bat
+btop
+jq

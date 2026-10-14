@@ -1,0 +1,50 @@
+# Interactive zsh. Self-contained: no distro zsh framework required.
+# Machine-specific tweaks go in ~/.zshrc.local (not tracked).
+
+# --- history ---
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+setopt HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE SHARE_HISTORY INC_APPEND_HISTORY
+
+# --- behaviour ---
+setopt AUTO_CD INTERACTIVE_COMMENTS PROMPT_SUBST
+bindkey -e
+
+# --- completion ---
+autoload -Uz compinit && compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump"
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# --- helpers ---
+_has() { command -v "$1" >/dev/null 2>&1 }
+_source_first() { local f; for f in "$@"; do [[ -r $f ]] && { source "$f"; return 0; }; done; return 1 }
+
+# --- tools (every block is guarded; missing tools are skipped) ---
+[[ -r "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
+_has mise && eval "$(mise activate zsh)"
+_has starship && eval "$(starship init zsh)"
+_has zoxide && eval "$(zoxide init zsh)"
+if _has fzf; then
+  _source_first /usr/share/fzf/key-bindings.zsh /usr/share/doc/fzf/examples/key-bindings.zsh
+  _source_first /usr/share/fzf/completion.zsh /usr/share/doc/fzf/examples/completion.zsh
+fi
+
+# --- plugins (distro-packaged, syntax-highlighting must be last) ---
+_source_first /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \
+              /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+_source_first /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+              /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# --- aliases ---
+alias ls='ls --color=auto'
+alias la='ls -a --color=auto'
+alias tree='tree --dirsfirst -F'
+alias grep='grep --color=auto'
+_has eza && alias ll='eza -l --git --group-directories-first'
+_has bat && alias cat='bat --paging=never'
+# Debian ships these under different names
+_has batcat && ! _has bat && alias bat='batcat'
+_has fdfind && ! _has fd && alias fd='fdfind'
+
+[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

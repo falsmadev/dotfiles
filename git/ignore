@@ -1,0 +1,6 @@
+# Global gitignore (~/.config/git/ignore)
+.DS_Store
+*.swp
+.idea/
+mise.local.toml
+.env.local

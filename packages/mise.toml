@@ -1,0 +1,11 @@
+# Global dev tools, managed by mise. Linked to ~/.config/mise/config.toml
+[tools]
+node = "lts"
+pnpm = "latest"
+uv = "latest"
+go = "latest"
+starship = "latest"
+lazygit = "latest"
+lazydocker = "latest"
+shfmt = "latest"
+zoxide = "latest"

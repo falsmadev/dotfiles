@@ -1,0 +1,16 @@
+# Identity is NOT stored here. `./install git` writes it to ~/.gitconfig.local
+[include]
+	path = ~/.gitconfig.local
+
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[rebase]
+	autoStash = true
+[core]
+	editor = vim

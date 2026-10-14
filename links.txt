@@ -1,0 +1,8 @@
+# <repo path>          <destination>
+# Edit this file to add/remove links. `./install link` applies it.
+shell/zshrc            ~/.zshrc
+shell/zshenv           ~/.zshenv
+git/gitconfig          ~/.gitconfig
+git/ignore             ~/.config/git/ignore
+config/starship.toml   ~/.config/starship.toml
+packages/mise.toml     ~/.config/mise/config.toml

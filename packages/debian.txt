@@ -1,0 +1,15 @@
+# System packages (apt). Dev tools live in mise.toml, not here.
+build-essential
+curl
+git
+vim
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+fzf
+ripgrep
+fd-find
+bat
+btop
+jq
+unzip
