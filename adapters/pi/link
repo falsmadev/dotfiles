@@ -4,7 +4,7 @@
 #   AGENTS.md  -> ~/.pi/agent/AGENTS.md          (symlink)
 #   extension  -> ~/.pi/agent/extensions/subagent (symlink)
 #   agents     -> ~/.pi/agent/agents/<name>.md   (rendered copies: model line added from models.conf)
-#   mcp        -> ~/.pi/agent/mcp.json           (servers merged in; existing entries such as radius kept)
+#   mcp        -> ~/.pi/agent/mcp.json           (servers merged in + mcp-overrides.json; existing entries such as radius kept)
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 PI="$HOME/.pi/agent"
@@ -77,7 +77,10 @@ log "MCP servers -> $PI/mcp.json (merge)"
 command -v jq >/dev/null || { warn "jq not installed; skipping MCP merge (./install packages)"; exit 0; }
 cur="$PI/mcp.json"
 base="$( [[ -f "$cur" ]] && cat "$cur" || echo '{}' )"
-merged="$(jq -S --slurpfile new "$ROOT/agent/mcp/servers.json" '.mcpServers = ((.mcpServers // {}) + $new[0].mcpServers)' <<<"$base")"
+# neutral servers first, then pi-only overrides (exposure) merged into the matching servers
+merged="$(jq -S --slurpfile new "$ROOT/agent/mcp/servers.json" --slurpfile ov "$ROOT/adapters/pi/mcp-overrides.json" '
+  .mcpServers = ((.mcpServers // {}) + $new[0].mcpServers)
+  | reduce ($ov[0].mcpServers | keys[]) as $k (.; if .mcpServers[$k] then .mcpServers[$k] += $ov[0].mcpServers[$k] else . end)' <<<"$base")"
 if [[ -f "$cur" && "$(jq -S . "$cur")" == "$merged" ]]; then echo "   = $cur"
 else
   [[ -f "$cur" ]] && { run mkdir -p "$BACKUP"; run cp "$cur" "$BACKUP/mcp.json"; echo "   ~ backed up $cur"; }

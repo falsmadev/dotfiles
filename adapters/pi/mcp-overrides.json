@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pare-git":   { "toolExposure": { "status": "direct", "diff": "direct", "log": "direct", "show": "direct", "blame": "direct" } },
+    "pare-lint":  { "toolExposure": { "lint": "direct", "format-check": "direct" } },
+    "pare-build": { "toolExposure": { "build": "direct", "tsc": "direct" } },
+    "pare-test":  { "toolExposure": { "run": "direct" } }
+  }
+}

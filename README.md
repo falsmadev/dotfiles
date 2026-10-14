@@ -55,7 +55,7 @@ grill-with-docs  ->  to-spec  ->  to-tickets  ->  implement (drives tdd)  ->  co
 | `agent/AGENTS.md` | `~/.pi/agent/AGENTS.md` | symlink |
 | `adapters/pi/extensions/subagent` | `~/.pi/agent/extensions/subagent` | symlink (vendored from pi 1.2.0, see PROVENANCE.md) |
 | `agent/agents/*.md` | `~/.pi/agent/agents/*.md` | rendered; `model:` added from `adapters/pi/models.conf` |
-| `agent/mcp/servers.json` | `~/.pi/agent/mcp.json` | merged; existing servers (e.g. radius) kept |
+| `agent/mcp/servers.json` + `adapters/pi/mcp-overrides.json` | `~/.pi/agent/mcp.json` | merged; existing servers (e.g. radius) kept. Overrides expose a few read-only pare tools directly (pi hides MCP tools behind codemode by default) |
 
 Agents: `scout` (deepseek-v4.1-flash), `standards-reviewer` and `spec-reviewer` (claude-sonnet-5-5), the pair the
 `code-review` skill fans out to. Change models in `models.conf`, re-run `./install pi`, then `/reload` in pi.
@@ -65,5 +65,5 @@ Agent files are neutral (no model); the model line is the only pi-specific bit.
 
 1. Dev environment (this)
 2. Agent core: skills, MCP list, global rules, harness-neutral (done)
-3. pi adapter (done, not yet applied to the live machine)
+3. pi adapter (done, applied, smoke-tested)
 4. Work / personal split

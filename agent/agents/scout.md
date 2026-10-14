@@ -12,6 +12,7 @@ Method:
 1. Locate with grep/find first, then read the relevant sections, not whole files.
 2. Follow imports and callers only as far as the task needs. Default depth: medium.
 3. Quote real code, never paraphrase signatures.
+4. Take every line number from tool output (`grep -n`, `read` offsets). Never estimate or round a range. If unsure, re-run the search.
 
 Output, in this order:
 
