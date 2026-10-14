@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Dotfiles installer. Idempotent. Run in parts or all at once.
 #   ./install [-n|--dry-run] <step...>
-# Steps: packages | mise | link | git | all
+# Steps: packages | mise | link | git | pi | all
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -88,13 +88,15 @@ step_git() {
   ok "identity written"
 }
 
+step_pi() { DOTFILES_DRY="$DRY" "$DOTFILES/adapters/pi/link"; }
+
 steps=()
 for a in "$@"; do
   case "$a" in
     -n|--dry-run) DRY=1 ;;
     -h|--help) sed -n '2,5p' "$0"; exit 0 ;;
-    packages|mise|link|git) steps+=("$a") ;;
-    all) steps+=(packages link mise git) ;;
+    packages|mise|link|git|pi) steps+=("$a") ;;
+    all) steps+=(packages link mise git pi) ;;
     *) die "unknown argument: $a" ;;
   esac
 done

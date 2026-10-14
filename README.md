@@ -11,9 +11,9 @@ shell/             zshrc, zshenv
 git/               gitconfig (no identity), global ignore
 config/            app configs (starship)
 packages/          arch.txt, debian.txt (system), mise.toml (dev tools)
-agent/             harness-neutral: AGENTS.md, skills/, mcp/servers.json, skills.list + skills.lock
+agent/             harness-neutral: AGENTS.md, skills/, agents/, mcp/servers.json, skills.list + skills.lock
 scripts/           sync-skills (vendor upstream skills per agent/skills.list)
-adapters/          (part 3) per-harness wiring, pi only
+adapters/pi/       pi wiring: link script, models.conf, vendored subagent extension
 ```
 
 ## Usage
@@ -21,8 +21,8 @@ adapters/          (part 3) per-harness wiring, pi only
 ```sh
 git clone <repo> ~/dotfiles && cd ~/dotfiles
 ./install -n all      # preview everything
-./install all         # packages -> link -> mise -> git identity
-./install link        # or any single step: packages | mise | link | git
+./install all         # packages -> link -> mise -> git identity -> pi
+./install link        # or any single step: packages | mise | link | git | pi
 ```
 
 - Existing files are moved to `~/.dotfiles-backup/<timestamp>/`, never deleted.
@@ -47,9 +47,23 @@ grill-with-docs  ->  to-spec  ->  to-tickets  ->  implement (drives tdd)  ->  co
 `wizard`, `wait-what`. Run `setup-matt-pocock-skills` once per repo to say where tickets live
 (local `.scratch/` files for now; Jira would be a custom tracker).
 
+## pi adapter (`./install pi`)
+
+| Source | Lands in | How |
+|---|---|---|
+| `agent/skills/<n>` | `~/.agents/skills/<n>` | per-skill symlink (path other tools read too) |
+| `agent/AGENTS.md` | `~/.pi/agent/AGENTS.md` | symlink |
+| `adapters/pi/extensions/subagent` | `~/.pi/agent/extensions/subagent` | symlink (vendored from pi 1.2.0, see PROVENANCE.md) |
+| `agent/agents/*.md` | `~/.pi/agent/agents/*.md` | rendered; `model:` added from `adapters/pi/models.conf` |
+| `agent/mcp/servers.json` | `~/.pi/agent/mcp.json` | merged; existing servers (e.g. radius) kept |
+
+Agents: `scout` (deepseek-v4.1-flash), `standards-reviewer` and `spec-reviewer` (claude-sonnet-5-5), the pair the
+`code-review` skill fans out to. Change models in `models.conf`, re-run `./install pi`, then `/reload` in pi.
+Agent files are neutral (no model); the model line is the only pi-specific bit.
+
 ## Roadmap
 
 1. Dev environment (this)
 2. Agent core: skills, MCP list, global rules, harness-neutral (done)
-3. pi adapter
+3. pi adapter (done, not yet applied to the live machine)
 4. Work / personal split
