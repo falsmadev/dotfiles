@@ -28,7 +28,7 @@ git clone <repo> ~/dotfiles && cd ~/dotfiles
 - Existing files are moved to `~/.dotfiles-backup/<timestamp>/`, never deleted.
 - Git identity lives in `~/.gitconfig.local`; machine tweaks in `~/.zshrc.local` and `~/.zshenv.local`. Neither is tracked.
 - Dev tools go in `packages/mise.toml`; only OS-level packages go in `packages/*.txt`.
-- Supported: Arch-family (CachyOS, Arch) and Debian-family.
+- Supported: Arch-family (CachyOS, Arch), tested. Debian-family (`packages/debian.txt`, apt) is written but **untested**: no Debian machine available. Expect to fix package names on first run.
 
 ## Agent core
 
